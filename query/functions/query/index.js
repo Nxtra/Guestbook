@@ -15,6 +15,7 @@ exports.handle = function (event, context, callback) {
     let params = {
         TableName : "guestbook-3",
         IndexName: "YearMonthAttribute-Date-index",
+        Limit: 50,
         KeyConditionExpression: "YearMonthAttribute = :YMAttribute and #Dt > :date",
         ExpressionAttributeNames:{
             "#Dt": "Date"
