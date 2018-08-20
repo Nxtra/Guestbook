@@ -1,0 +1,6 @@
+.idea/
+project.json
+design.docx
+~$design.docx
+.DS_Store
+*.docx
