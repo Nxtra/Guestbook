@@ -9,4 +9,4 @@
 
 ### Info
 I deploy the Lambda Functions using Apex.  
-The project.json files are not inculded in this repo.
+The project.json files are not included in this repo.
