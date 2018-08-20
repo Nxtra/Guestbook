@@ -1,0 +1,235 @@
+<html>
+<head>
+    <!--<editor-fold desc="Style">-->
+    <style>
+
+        #messagesContainer{
+            padding: 20px;
+        }
+        .container {
+            padding: 1.6em;
+        }
+
+        .back-to-top {
+            cursor: pointer;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display:none;
+        }
+
+        body {
+            font-family: 'Arimo', sans-serif;
+            padding-top: 50px;
+        }
+
+        .menu-bar {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            height: 14px;
+            margin-left: -10px;
+        }
+
+        .bars {
+            display: block;
+            width: 20px;
+            height: 3px;
+            background-color: #333;
+            box-shadow: 0 5px 0 #333, 0 10px 0 #333;
+        }
+
+        .menu {
+            display: none;
+            width: 100%;
+            padding: 30px 10px 50px;
+            margin: 0 auto;
+            text-align: center;
+            background-color: #fff;
+        }
+        .menu ul {
+            margin-bottom: 0;
+        }
+        .menu a{
+            color: #333;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        .menu a:hover {
+            text-decoration: none;
+            opacity: 1;
+        }
+
+        .wrapword{
+            white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+            white-space: -webkit-pre-wrap; /*Chrome & Safari */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            white-space: pre-wrap;       /* css-3 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            word-break: break-all;
+            white-space: normal;
+        }
+
+    </style>
+    <!--</editor-fold>-->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="http://fonts.googleapis.com/css?family=Arimo:400" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<!--<editor-fold desc="body html">-->
+    <a class="menu-bar" data-toggle="collapse" href="#menu" aria-expanded="true">
+        <span class="bars"></span>
+    </a>
+    <div class="collapse menu in" id="menu">
+        <ul class="list-inline">
+            <li><a href="http://www.nickvanhoof.com">Home</a></li>
+            <li><a href="http://nickvanhoof.com/2018/08/05/lambdas-a-guestbook-implementation/">Blogpost</a></li>
+            <li><a id="about" data-placement="bottom" data-toggle="popover" title="#Explain"
+                   data-content="When you're leaving a comment you're using the 'write' Lambda Function. If your viewing all previous comments
+            you are using the 'read' lambda. Visit www.nickvanhoof.com to learn more!" href="#">page-info</a></li>
+            <li><a href="http://nickvanhoof.com/about-me/">About-me</a></li>
+        </ul>
+    </div>
+
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading clearfix">
+            <h3>Make a new guestbook entry</h3>
+        </div>
+        <div class="panel-body collapse in">
+            <form>
+                <div class="form-group">
+                    <label class="col-md-12 control-label" for="message">Message</label>
+                    <div class="col-md-12">
+                        <textarea class="form-control" id="message" name="message" placeholder="(Enter your message here)"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-12 control-label" for="author">Author</label>
+                    <div class="col-md-12">
+                        <textarea class="form-control" id="author" name="author" placeholder="(Anonymous if left empty)"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-12 control-label" for="submitButton"></label>
+                    <div class="col-md-12">
+                        <button id="submitButton" name="submit" type="submit" class="btn btn-warning">Submit
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="messagesContainer" class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading clearfix"><h3>Guestbook</h3>
+            <div class="pull-right">
+                <button id="toggleButton" class="btn btn-warning" type="button" data-toggle="collapse" data-target="#collapse"
+                        aria-expanded="false" aria-controls="collapse"><i class="fa fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="panel-body collapse in" id="collapse">
+
+            <table class="table table-striped table-bordered">
+                <colgroup>
+                    <col style="width: 5% ; max-width: 5% ;">
+                    <col style="width: 65%; max-width: 70%;">
+                    <col style="width: 15%; max-width: 10%;">
+                    <col style="width: 15%; max-width: 15%;">
+                </colgroup>
+                <thead id="guestbook-table-head" class="thead-light">
+                <tr>
+                    <th >#</th>
+                    <th >Message</th>
+                    <th >Author</th>
+                    <th >Timestamp</th>
+                </tr>
+                </thead>
+                <tbody id="guestbook-table-body">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<a id="back-to-top" href="http://nickvanhoof.com/2018/08/05/lambdas-a-guestbook-implementation/" class="btn btn-primary btn-lg back-to-top" role="button" title="Click to return to wordpress post" data-toggle="tooltip" data-placement="left"><span class="glyphicon glyphicon-chevron-left"></span>Back</a>
+<!--</editor-fold>-->
+
+<script type="text/javascript">
+    let API_URL = 'https://8y5o5idfl4.execute-api.eu-west-1.amazonaws.com/default/posts'
+
+    $(document).ready(function(){
+        $.ajax({
+            type: 'GET',
+            url: API_URL,
+
+            success: function(data){
+                $('#guestbook-table-body').html('');
+
+                let number = 1;
+                data.Items.forEach(function(guestbookItem){
+                    let date = new Date(guestbookItem.Date)
+                    date = date.toDateString()
+
+                    let content = '<tr>' +
+                            '<th>' + number++ + '</th>' +
+                            '<td class="wrapword">' + guestbookItem.Message + '</td>' +
+                            '<td class="wrapword">' + guestbookItem.Author + '</td> ' +
+                            '<td class="wrapword">' + date + '</td>' +
+                        '</tr>'
+
+                    $('#guestbook-table-body').append(content);
+                })
+            }
+        });
+    });
+
+    $('#submitButton').on('click', function(){
+        $.ajax({
+            type: 'POST',
+            url: API_URL,
+            data: JSON.stringify({
+                "message": $('#message').val(),
+                "author": $('#author').val()
+            }),
+            contentType: "application/json",
+
+            success: function(data){
+                location.reload();
+            }
+        });
+
+        return false; //override default behaviour of a button. Otherwise page will be reloaded before request is complete
+    });
+
+    $(function () {
+        $('#author').keypress(function (e) {
+            let code = e.keyCode;
+            if (code == 13) {
+                $("#submitButton").trigger('click');
+                return false;
+            }
+        });
+    });
+
+    $(function () {
+        $('#about').popover({
+            container: 'body'
+        })
+    })
+</script>
+</body>
+</html>
